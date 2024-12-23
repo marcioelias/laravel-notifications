@@ -2,7 +2,6 @@
 
 namespace MarcioElias\LaravelNotifications;
 
-use MarcioElias\LaravelNotifications\Commands\LaravelNotificationsCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -18,7 +17,6 @@ class LaravelNotificationsServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-notifications')
             ->hasConfigFile()
-            ->hasMigration('create_notifications_table')
-            ->hasCommand(LaravelNotificationsCommand::class);
+            ->hasMigration('create_notifications_table');
     }
 }
