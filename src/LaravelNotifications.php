@@ -69,16 +69,21 @@ class LaravelNotifications
 
     protected function getSnsPushPayload(string $title, ?string $body = null, array $data = [])
     {
+        $payloadData = ! empty($data) ? ['data' => $data] : [];
+
         return [
-            'default' => $title,
-            'GCM' => json_encode([
-                'notification' => [
-                    'title' => $title,
-                    'body' => $body,
+            'GCM' => json_encode(array_merge([
+                'fcmV1Message' => [
+                    'message' => [
+                        'notification' => [
+                            'title' => $title,
+                            'body' => $body,
+                        ],
+                    ],
                 ],
-                'data' => $data,
-            ]),
-            'APNS' => json_encode([
+            ], $payloadData)),
+
+            'APNS' => json_encode(array_merge([
                 'aps' => [
                     'alert' => [
                         'title' => $title,
@@ -86,8 +91,24 @@ class LaravelNotifications
                     ],
                     'sound' => 'default',
                 ],
-                'data' => $data,
-            ]),
+            ], $payloadData)),
+
+            'APNS_SANDBOX' => json_encode(array_merge([
+                'aps' => [
+                    'alert' => [
+                        'title' => $title,
+                        'body' => $body,
+                    ],
+                    'sound' => 'default',
+                ],
+            ], $payloadData)),
+
+            'ADM' => json_encode(array_merge([
+                'notification' => [
+                    'title' => $title,
+                    'body' => $body,
+                ],
+            ], $payloadData)),
         ];
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use MarcioElias\LaravelNotifications\LaravelNotifications;
 
 it('throws an exception if push client is not found', function () {
-    Config::set('laravel-notifications.push_service_provider', 'unknown_provider');
+    Config::set('notifications.push_service_provider', 'unknown_provider');
 
     $notifications = new LaravelNotifications;
 
@@ -38,15 +38,16 @@ it('sends push notifications using AWS SNS', function () {
     $snsClientMock = Mockery::mock(SnsClient::class);
 
     $payload = [
-        'default' => 'title',
         'GCM' => json_encode([
-            'notification' => [
-                'title' => 'title',
-                'body' => 'body',
+            'fcmV1Message' => [
+                'message' => [
+                    'notification' => [
+                        'title' => 'title',
+                        'body' => 'body',
+                    ],
+                ],
             ],
-            'data' => [
-                'alert' => 'Hello, world!',
-            ],
+            'data' => ['alert' => 'Hello, world!'],
         ]),
         'APNS' => json_encode([
             'aps' => [
@@ -56,12 +57,28 @@ it('sends push notifications using AWS SNS', function () {
                 ],
                 'sound' => 'default',
             ],
-            'data' => [
-                'alert' => 'Hello, world!',
+            'data' => ['alert' => 'Hello, world!'],
+        ]),
+        'APNS_SANDBOX' => json_encode([
+            'aps' => [
+                'alert' => [
+                    'title' => 'title',
+                    'body' => 'body',
+                ],
+                'sound' => 'default',
             ],
+            'data' => ['alert' => 'Hello, world!'],
+        ]),
+        'ADM' => json_encode([
+            'notification' => [
+                'title' => 'title',
+                'body' => 'body',
+            ],
+            'data' => ['alert' => 'Hello, world!'],
         ]),
     ];
 
+    // Ensure the mock SNS client is called with the exact message structure
     $snsClientMock->shouldReceive('publish')
         ->once()
         ->with([
@@ -71,11 +88,11 @@ it('sends push notifications using AWS SNS', function () {
         ])
         ->andReturn(['MessageId' => '1234']);
 
-    Config::set('laravel-notifications.push_service_provider', 'aws_sns');
+    Config::set('notifications.push_service_provider', 'aws_sns');
 
     $notifications = Mockery::mock(LaravelNotifications::class)->makePartial();
     $notifications->shouldAllowMockingProtectedMethods();
-    $notifications->shouldReceive('getSnsClient')->andReturn($snsClientMock);
+    $notifications->shouldReceive('getPushClient')->andReturn($snsClientMock);
 
     $result = null;
 
@@ -95,3 +112,4 @@ it('sends push notifications using AWS SNS', function () {
     expect($result)->toBe('success');
     expect(DB::table('notifications')->count())->toBe(1);
 });
+
