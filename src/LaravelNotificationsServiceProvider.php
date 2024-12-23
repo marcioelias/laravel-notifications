@@ -2,9 +2,9 @@
 
 namespace MarcioElias\LaravelNotifications;
 
+use MarcioElias\LaravelNotifications\Commands\LaravelNotificationsCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use MarcioElias\LaravelNotifications\Commands\LaravelNotificationsCommand;
 
 class LaravelNotificationsServiceProvider extends PackageServiceProvider
 {

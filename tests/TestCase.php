@@ -3,8 +3,8 @@
 namespace MarcioElias\LaravelNotifications\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use MarcioElias\LaravelNotifications\LaravelNotificationsServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
