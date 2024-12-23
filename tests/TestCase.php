@@ -3,8 +3,8 @@
 namespace MarcioElias\LaravelNotifications\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use MarcioElias\LaravelNotifications\LaravelNotificationsServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
@@ -28,9 +28,7 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_laravel-notifications_table.php.stub';
+        $migration = include __DIR__.'/../database/migrations/create_notifications_table.php.stub';
         $migration->up();
-        */
     }
 }

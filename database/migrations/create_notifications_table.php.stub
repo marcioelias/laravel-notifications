@@ -8,11 +8,15 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('laravel_notifications_table', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-
-            // add fields
-
+            $table->string('title')->nullable();
+            $table->string('body')->nullable();
+            $table->integer('type')->nullable();
+            $table->string('icon')->nullable();
+            $table->string('sound')->nullable();
+            $table->json('data')->nullable();
+            $table->boolean('readed')->default(false);
             $table->timestamps();
         });
     }
