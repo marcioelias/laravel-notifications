@@ -112,4 +112,3 @@ it('sends push notifications using AWS SNS', function () {
     expect($result)->toBe('success');
     expect(DB::table('notifications')->count())->toBe(1);
 });
-
