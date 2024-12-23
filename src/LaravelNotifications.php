@@ -39,7 +39,7 @@ class LaravelNotifications
 
     protected function getPushClient()
     {
-        return match (config('laravel-notifications.push_service_provider')) {
+        return match (config('notifications.push_service_provider')) {
             'aws_sns' => $this->getSnsClient(),
             default => throw new \Exception('Push client not found')
         };
