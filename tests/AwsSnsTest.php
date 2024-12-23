@@ -39,20 +39,20 @@ it('sends push notifications using AWS SNS', function () {
 
     $payload = [
         'default' => 'title',
-        'GCM'     => json_encode([
+        'GCM' => json_encode([
             'notification' => [
                 'title' => 'title',
-                'body'  => 'body',
+                'body' => 'body',
             ],
             'data' => [
                 'alert' => 'Hello, world!',
             ],
         ]),
-        'APNS'    => json_encode([
+        'APNS' => json_encode([
             'aps' => [
                 'alert' => [
                     'title' => 'title',
-                    'body'  => 'body',
+                    'body' => 'body',
                 ],
                 'sound' => 'default',
             ],
@@ -95,4 +95,3 @@ it('sends push notifications using AWS SNS', function () {
     expect($result)->toBe('success');
     expect(DB::table('notifications')->count())->toBe(1);
 });
-
