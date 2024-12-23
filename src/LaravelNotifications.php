@@ -71,18 +71,18 @@ class LaravelNotifications
     {
         return [
             'default' => $title,
-            'GCM'     => json_encode([
+            'GCM' => json_encode([
                 'notification' => [
                     'title' => $title,
-                    'body'  => $body,
+                    'body' => $body,
                 ],
                 'data' => $data,
             ]),
-            'APNS'    => json_encode([
+            'APNS' => json_encode([
                 'aps' => [
                     'alert' => [
                         'title' => $title,
-                        'body'  => $body,
+                        'body' => $body,
                     ],
                     'sound' => 'default',
                 ],

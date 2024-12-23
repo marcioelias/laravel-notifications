@@ -22,4 +22,3 @@ it('allows calling methods on the facade', function () {
 
     expect($result)->toBeTrue();
 });
-
