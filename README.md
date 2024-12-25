@@ -1,11 +1,6 @@
-# This package handle notifictation like push notifications, sms, etc. The focus is using AWS Services.
+# Send notifications with AWS SNS made easy.
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/marcioelias/laravel-notifications.svg?style=flat-square)](https://packagist.org/packages/marcioelias/laravel-notifications)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/marcioelias/laravel-notifications/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/marcioelias/laravel-notifications/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/marcioelias/laravel-notifications/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/marcioelias/laravel-notifications/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/marcioelias/laravel-notifications.svg?style=flat-square)](https://packagist.org/packages/marcioelias/laravel-notifications)
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+The goal of this package is turn very easy the process of sending notifications using AWS SNS. 
 
 ## Support us
 
@@ -23,7 +18,7 @@ You can install the package via composer:
 composer require marcioelias/laravel-notifications
 ```
 
-You can publish and run the migrations with:
+Publish and run the migrations:
 
 ```bash
 php artisan vendor:publish --tag="laravel-notifications-migrations"
@@ -40,20 +35,14 @@ This is the contents of the published config file:
 
 ```php
 return [
+    'push_service_provider' => env('PUSH_SERVICE_PROVIDER', 'aws_sns'),
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-notifications-views"
 ```
 
 ## Usage
 
 ```php
-$laravelNotifications = new MarcioElias\LaravelNotifications();
-echo $laravelNotifications->echoPhrase('Hello, MarcioElias!');
+    // will be available soon
 ```
 
 ## Testing
