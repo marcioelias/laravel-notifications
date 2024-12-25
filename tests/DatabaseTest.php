@@ -36,7 +36,7 @@ it('can create a record of a notification on the database', function () {
 });
 
 it('asserts morphTo relationship is properly configured', function () {
-    $notification = new Notification();
+    $notification = new Notification;
 
     expect($notification->notifiable())->toBeInstanceOf(MorphTo::class);
 });
