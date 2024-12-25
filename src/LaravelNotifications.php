@@ -3,6 +3,7 @@
 namespace MarcioElias\LaravelNotifications;
 
 use Aws\Sns\SnsClient;
+use Illuminate\Support\Facades\Auth;
 use MarcioElias\LaravelNotifications\Enums\NotificationType;
 use MarcioElias\LaravelNotifications\Models\Notification;
 
@@ -59,7 +60,7 @@ class LaravelNotifications
 
     protected function storeNotification(string $title, ?string $body = null, NotificationType $notificationType = NotificationType::SMS, array $data = [])
     {
-        Notification::create([
+        Auth::user()->notifiable()->create([
             'title' => $title,
             'body' => $body,
             'notification_type' => $notificationType,

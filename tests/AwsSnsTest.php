@@ -3,7 +3,9 @@
 use Aws\Sns\SnsClient;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Laravel\Sanctum\Sanctum;
 use MarcioElias\LaravelNotifications\LaravelNotifications;
+use MarcioElias\LaravelNotifications\Tests\Support\Models\User;
 
 it('throws an exception if push client is not found', function () {
     Config::set('notifications.push_service_provider', 'unknown_provider');
@@ -78,7 +80,6 @@ it('sends push notifications using AWS SNS', function () {
         ]),
     ];
 
-    // Ensure the mock SNS client is called with the exact message structure
     $snsClientMock->shouldReceive('publish')
         ->once()
         ->with([
@@ -96,6 +97,14 @@ it('sends push notifications using AWS SNS', function () {
 
     $result = null;
 
+    $user = User::create([
+        'name' => 'John Doe',
+        'email' => 'john.doe@example.com',
+        'password' => bcrypt('password'),
+    ]);
+
+    Sanctum::actingAs($user, ['*']);
+
     try {
         $notifications->sendPush(
             'arn:aws:sns:us-east-1:123456789012:endpoint/APNS/MyApp/fd6dc79a-cf27-42a3-8c61-d56be70bb43d',
@@ -112,4 +121,3 @@ it('sends push notifications using AWS SNS', function () {
     expect($result)->toBe('success');
     expect(DB::table('notifications')->count())->toBe(1);
 });
-

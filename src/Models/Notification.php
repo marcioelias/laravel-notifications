@@ -26,4 +26,9 @@ class Notification extends Model
             'data' => 'array',
         ];
     }
+
+    public function notifiable()
+    {
+        return $this->morphTo();
+    }
 }
