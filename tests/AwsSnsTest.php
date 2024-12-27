@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\Sanctum;
 use MarcioElias\LaravelNotifications\LaravelNotifications;
-use MarcioElias\LaravelNotifications\Tests\Support\Models\User;
+use MarcioElias\LaravelNotifications\Tests\Support\Helpers;
 
 it('throws an exception if push client is not found', function () {
     Config::set('notifications.push_service_provider', 'unknown_provider');
@@ -21,9 +21,7 @@ it('throws an exception if push client is not found', function () {
 })->throws(Exception::class, 'Push client not found');
 
 it('returns a valid SnsClient instance using reflection', function () {
-    putenv('AWS_DEFAULT_REGION=us-east-1');
-    putenv('AWS_ACCESS_KEY_ID=test-access-key');
-    putenv('AWS_SECRET_ACCESS_KEY=test-secret-key');
+    Helpers::setupAwsEnv();
 
     $notifications = new LaravelNotifications;
 
@@ -97,13 +95,7 @@ it('sends push notifications using AWS SNS', function () {
 
     $result = null;
 
-    $user = User::create([
-        'name' => 'John Doe',
-        'email' => 'john.doe@example.com',
-        'password' => bcrypt('password'),
-    ]);
-
-    Sanctum::actingAs($user, ['*']);
+    Sanctum::actingAs($user = Helpers::fakeUser());
 
     try {
         $notifications->sendPush(
@@ -120,4 +112,52 @@ it('sends push notifications using AWS SNS', function () {
 
     expect($result)->toBe('success');
     expect(DB::table('notifications')->count())->toBe(1);
+});
+
+it('can create a endpoint arn to send push notifications using aws sns service', function () {
+    Helpers::setupAwsEnv();
+
+    Config::set('notifications.aws_sns_application_arn', 'arn:aws:sns:us-east-1:123456789012:app/GCM/XXXXXX');
+
+    $mockResult = Mockery::mock('Aws\Result');
+    $mockResult->shouldReceive('get')
+        ->once()
+        ->with('EndpointArn')
+        ->andReturn('arn:aws:sns:us-east-1:123456789012:endpoint/GCM/SomeEndpointArn');
+
+    $snsClientMock = Mockery::mock(SnsClient::class);
+    $snsClientMock->shouldReceive('createPlatformEndpoint')
+        ->once()
+        ->with([
+            'PlatformApplicationArn' => 'arn:aws:sns:us-east-1:123456789012:app/GCM/XXXXXX',
+            'Token' => 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+            'CustomUserData' => json_encode(['user_id' => 1]),
+        ])
+        ->andReturn($mockResult);
+
+    $notifications = Mockery::mock(LaravelNotifications::class)->makePartial();
+    $notifications->shouldAllowMockingProtectedMethods();
+    $notifications->shouldReceive('getSnsClient')->andReturn($snsClientMock);
+
+    $endpointArn = $notifications->createEndpointArn(
+        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+        ['user_id' => 1]
+    );
+
+    expect($endpointArn)->toBe('arn:aws:sns:us-east-1:123456789012:endpoint/GCM/SomeEndpointArn');
+});
+
+it('should not use a custom user data with more than 256 characters', function () {
+    Helpers::setupAwsEnv();
+
+    Config::set('notifications.aws_sns_application_arn', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+
+    $notifications = new LaravelNotifications;
+
+    expect(function () use ($notifications) {
+        $notifications->createEndpointArn(
+            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+            ['user_id' => str_repeat('a', 257)]
+        );
+    })->toThrow(InvalidArgumentException::class);
 });

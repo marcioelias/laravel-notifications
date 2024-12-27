@@ -4,6 +4,7 @@ namespace MarcioElias\LaravelNotifications;
 
 use Aws\Sns\SnsClient;
 use Illuminate\Support\Facades\Auth;
+use InvalidArgumentException;
 use MarcioElias\LaravelNotifications\Enums\NotificationType;
 use MarcioElias\LaravelNotifications\Models\Notification;
 
@@ -111,5 +112,29 @@ class LaravelNotifications
                 ],
             ], $payloadData)),
         ];
+    }
+
+    public function createEndpointArn(string $deviceToken, array $customUserData = []): string
+    {
+        try {
+            $customUserData = json_encode($customUserData);
+
+            if (strlen($customUserData) > 256) {
+                throw new InvalidArgumentException('CustomUserData must be less than 256 characters');
+            }
+
+            $client = $this->getSnsClient();
+
+            $result = $client->createPlatformEndpoint([
+                'PlatformApplicationArn' => config('notifications.aws_sns_application_arn'),
+                'Token' => $deviceToken,
+                'CustomUserData' => $customUserData,
+            ]);
+
+            return $result->get('EndpointArn');
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

@@ -16,4 +16,33 @@ return [
     |
     */
     'push_service_provider' => env('PUSH_SERVICE_PROVIDER', 'aws_sns'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | AWS SNS Application ARN
+    |--------------------------------------------------------------------------
+    |
+    | The ARN of the application that will be used to send push notifications.
+    | This ARN is used to create a platform endpoint.
+    |
+    */
+    'aws_sns_application_arn' => env('AWS_SNS_APPLICATION_ARN', null),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tables with notifiable trait on his models
+    |--------------------------------------------------------------------------
+    |
+    | Will be executed a migration to create device_token column on each table
+    | listed here.
+    |
+    */
+    'notifiable_tables' => [
+        'users',
+    ],
+
+    'api' => [
+        'pagination' => 20,
+    ],
+
 ];

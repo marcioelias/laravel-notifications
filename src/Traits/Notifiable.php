@@ -9,6 +9,6 @@ trait Notifiable
 {
     public function notifiable(): MorphMany
     {
-        return $this->morphMany(Notification::class, 'notifiable')->chaperone();
+        return $this->morphMany(Notification::class, 'notifiable');
     }
 }

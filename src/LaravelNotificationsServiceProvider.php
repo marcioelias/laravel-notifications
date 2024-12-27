@@ -16,7 +16,11 @@ class LaravelNotificationsServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-notifications')
-            ->hasConfigFile()
-            ->hasMigration('create_notifications_table');
+            ->hasRoute('api')
+            ->hasConfigFile('notifications')
+            ->hasMigrations(
+                'create_notifications_table',
+                'alter_users_table_add_device_token_column'
+            );
     }
 }

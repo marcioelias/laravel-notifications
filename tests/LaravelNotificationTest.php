@@ -2,6 +2,7 @@
 
 use MarcioElias\LaravelNotifications\Facades\LaravelNotifications;
 use MarcioElias\LaravelNotifications\Models\Notification;
+use MarcioElias\LaravelNotifications\Tests\Support\Helpers;
 
 it('can mark a notification as readed', function () {
     $notificationData = [
@@ -11,15 +12,7 @@ it('can mark a notification as readed', function () {
         'notifiable_id' => 1,
     ];
 
-    $user = (object) [
-        'id' => 1,
-        'getKey' => function () {
-            return 1;
-        },
-        'getMorphClass' => function () {
-            return 'User';
-        },
-    ];
+    Helpers::fakeUser();
 
     $notification = Notification::factory()->create($notificationData);
 

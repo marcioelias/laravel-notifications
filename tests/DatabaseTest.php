@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Laravel\Sanctum\Sanctum;
 use MarcioElias\LaravelNotifications\Models\Notification;
+use MarcioElias\LaravelNotifications\Tests\Support\Helpers;
 use MarcioElias\LaravelNotifications\Tests\Support\Models\User;
 
 it('can create a record of a notification on the database', function () {
@@ -14,17 +15,7 @@ it('can create a record of a notification on the database', function () {
         'notifiable_id' => 1,
     ];
 
-    $user = (object) [
-        'id' => 1,
-        'getKey' => function () {
-            return 1;
-        },
-        'getMorphClass' => function () {
-            return 'User';
-        },
-    ];
-
-    Auth::shouldReceive('user')->andReturn($user);
+    Sanctum::actingAs($user = Helpers::fakeUser());
 
     $notification = Notification::factory()->create($notificationData);
 
@@ -42,11 +33,7 @@ it('asserts morphTo relationship is properly configured', function () {
 });
 
 it('tests the morphTo relationship with a User model', function () {
-    $user = User::create([
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
-        'password' => bcrypt('password'),
-    ]);
+    $user = Helpers::fakeUser();
 
     $notification = Notification::factory()->create([
         'notifiable_id' => $user->id,
