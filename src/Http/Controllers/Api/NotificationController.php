@@ -21,8 +21,8 @@ class NotificationController
 
     public function update(Request $request, Notification $notification)
     {
-        // dd($request->all());
         $notification->update(['readed' => $request->readed]);
+
         return response()->json(['message' => 'Notification read status updated'], 202);
     }
 }

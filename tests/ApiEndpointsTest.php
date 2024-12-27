@@ -51,7 +51,6 @@ it('must math notification resource structure', function () {
     expect($response->json('data')[0])->toEqual($expectedData);
 });
 
-
 it('must paginate notifications', function () {
     $this->withoutExceptionHandling();
     config()->set('notifications.api.pagination', 2);
@@ -74,7 +73,7 @@ it('must paginate notifications', function () {
     expect($response->json('links'))->toHaveKey('next');
 });
 
-it('update notification readed property', function() {
+it('update notification readed property', function () {
     $this->withoutExceptionHandling();
     Sanctum::actingAs($user = Helpers::fakeUser());
 
@@ -88,7 +87,7 @@ it('update notification readed property', function() {
 
     $response = $this->putJson(route('laravel-notifications.update', [
         'notification' => $notification,
-        'readed' => true
+        'readed' => true,
     ]));
 
     expect($response->status())->toBe(202);
@@ -98,7 +97,7 @@ it('update notification readed property', function() {
 
     $response = $this->putJson(route('laravel-notifications.update', [
         'notification' => $notification,
-        'readed' => false
+        'readed' => false,
     ]));
 
     expect($response->status())->toBe(202);
