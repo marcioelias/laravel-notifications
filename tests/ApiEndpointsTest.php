@@ -39,7 +39,7 @@ it('must math notification resource structure', function () {
         'id' => $notification->id,
         'title' => $notification->title,
         'body' => $notification->body,
-        'notification_type' => $notification->type,
+        'notification_type' => $notification->notification_type->value,
         'read_at' => $notification->read_at,
         'created_at' => $notification->created_at->toIsoString(),
         'updated_at' => $notification->updated_at->toIsoString(),
