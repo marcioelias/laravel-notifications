@@ -16,7 +16,9 @@ class NotificationController
             ->orderBy('created_at', 'desc')
             ->simplePaginate(config('notifications.api.pagination'));
 
-        return NotificationResource::collection($notifications);
+        return config('notifications.api.notification_resource')
+            ? config('notifications.api.notification_resource')::collection($notifications)
+            : NotificationResource::collection($notifications);
     }
 
     public function update(Request $request, Notification $notification)
