@@ -51,7 +51,7 @@ return [
     |
     */
     'api' => [
-        'notification_resource' =>  \MarcioElias\LaravelNotifications\Resources\NotificationResource::class,
+        'notification_resource' => \MarcioElias\LaravelNotifications\Resources\NotificationResource::class,
         'pagination' => 20,
     ],
 
