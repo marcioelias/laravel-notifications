@@ -48,8 +48,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.os == 'windows-latest' && '^^^' || '' }}${{ matrix.carbon }}" --no-interaction --no-update
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            CARBON_VERSION="^^^${{ matrix.carbon }}"
+          else
+            CARBON_VERSION="${{ matrix.carbon }}"
+          fi
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${CARBON_VERSION}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+          if [ $(composer show | grep -c 'pestphp/pest-plugin-arch') -eq 0 ]; then
+            composer require --dev pestphp/pest-plugin-arch
+            composer require --dev nunomaduro/laravel-arch
+          fi
 
       - name: List Installed Dependencies
         run: composer show -D
