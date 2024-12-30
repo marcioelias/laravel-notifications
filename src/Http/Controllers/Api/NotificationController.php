@@ -21,10 +21,17 @@ class NotificationController
             : NotificationResource::collection($notifications);
     }
 
-    public function update(Request $request, Notification $notification)
+    public function markAsRead(Request $request, Notification $notification)
     {
-        $notification->update(['readed' => $request->readed]);
+        $notification->markAsRead();
 
-        return response()->json(['message' => 'Notification read status updated'], 202);
+        return response()->json(['message' => 'You’ve marked the notification as read!'], 202);
+    }
+
+    public function markAsUnread(Request $request, Notification $notification)
+    {
+        $notification->markAsUnread();
+
+        return response()->json(['message' => 'You’ve marked the notification as unread!'], 202);
     }
 }

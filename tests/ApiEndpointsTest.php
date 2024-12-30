@@ -73,7 +73,7 @@ it('must paginate notifications', function () {
     expect($response->json('links'))->toHaveKey('next');
 });
 
-it('update notification readed property', function () {
+it('must mark a notification as readed', function () {
     $this->withoutExceptionHandling();
     Sanctum::actingAs($user = Helpers::fakeUser());
 
@@ -85,19 +85,30 @@ it('update notification readed property', function () {
 
     expect($notification->readed)->toBe(false);
 
-    $response = $this->putJson(route('laravel-notifications.update', [
-        'notification' => $notification,
-        'readed' => true,
+    $response = $this->putJson(route('laravel-notifications.read', [
+        'notification' => $notification
     ]));
 
     expect($response->status())->toBe(202);
 
     $notification->refresh();
     expect($notification->readed)->toBe(true);
+});
 
-    $response = $this->putJson(route('laravel-notifications.update', [
-        'notification' => $notification,
-        'readed' => false,
+it('must mark a notification as unreaded', function () {
+    $this->withoutExceptionHandling();
+    Sanctum::actingAs($user = Helpers::fakeUser());
+
+    $notification = Notification::factory(count: 1)->create([
+        'notifiable_type' => User::class,
+        'notifiable_id' => $user->id,
+        'readed' => true,
+    ])->first();
+
+    expect($notification->readed)->toBe(true);
+
+    $response = $this->putJson(route('laravel-notifications.unread', [
+        'notification' => $notification
     ]));
 
     expect($response->status())->toBe(202);

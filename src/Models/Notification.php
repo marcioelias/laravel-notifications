@@ -27,6 +27,16 @@ class Notification extends Model
         ];
     }
 
+    public function markAsRead(): void
+    {
+        $this->update(['readed' => true]);
+    }
+
+    public function markAsUnread(): void
+    {
+        $this->update(['readed' => false]);
+    }
+
     public function notifiable()
     {
         return $this->morphTo();
