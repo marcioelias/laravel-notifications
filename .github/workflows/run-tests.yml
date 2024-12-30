@@ -18,8 +18,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         php: [8.3]
-        laravel: [11.*, 10.*]
-        stability: [prefer-lowest, prefer-stable]
+        laravel: [11.*]
+        stability: [prefer-stable]
         include:
           - laravel: 11.*
             testbench: 9.*
@@ -50,13 +50,6 @@ jobs:
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.os == 'windows-latest' && '^^^' || '' }}${{ matrix.carbon }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
-
-      - name: Install nunomaduro/laravel-arch if Pest < 3.0
-        run: |
-          PEST_VERSION=$(composer show pestphp/pest | grep versions | awk '{print $NF}')
-          if [ "$(printf '%s\n' "3.0.0" "$PEST_VERSION" | sort -V | head -n1)" != "3.0.0" ]; then
-            composer require --dev nunomaduro/laravel-arch
-          fi
 
       - name: List Installed Dependencies
         run: composer show -D
