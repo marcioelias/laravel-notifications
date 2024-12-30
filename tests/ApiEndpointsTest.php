@@ -86,7 +86,7 @@ it('must mark a notification as readed', function () {
     expect($notification->readed)->toBe(false);
 
     $response = $this->putJson(route('laravel-notifications.read', [
-        'notification' => $notification
+        'notification' => $notification,
     ]));
 
     expect($response->status())->toBe(202);
@@ -108,7 +108,7 @@ it('must mark a notification as unreaded', function () {
     expect($notification->readed)->toBe(true);
 
     $response = $this->putJson(route('laravel-notifications.unread', [
-        'notification' => $notification
+        'notification' => $notification,
     ]));
 
     expect($response->status())->toBe(202);
