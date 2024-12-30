@@ -48,16 +48,7 @@
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint",
-        "post-install-cmd": [
-            "@check-pest-version"
-        ],
-        "post-update-cmd": [
-            "@check-pest-version"
-        ],
-        "check-pest-version": [
-            "php -r \"\\$lock = json_decode(file_get_contents('composer.lock'), true); \\$pest = array_filter(\\$lock['packages-dev'], fn(\\$pkg) => \\$pkg['name'] === 'pestphp/pest'); if (\\$pest && version_compare(current(\\$pest)['version'], '3.0.0', '<')) { system('composer require --dev nunomaduro/laravel-arch'); }\""
-        ]
+        "format": "vendor/bin/pint"
     },
     "config": {
         "sort-packages": true,
