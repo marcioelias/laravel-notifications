@@ -5,10 +5,10 @@ namespace MarcioElias\LaravelNotifications\Traits;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use MarcioElias\LaravelNotifications\Models\Notification;
 
-trait Notifiable
+trait Alertable
 {
-    public function notifiable(): MorphMany
+    public function alertable(): MorphMany
     {
-        return $this->morphMany(Notification::class, 'notifiable');
+        return $this->morphMany(Notification::class, 'alertable');
     }
 }

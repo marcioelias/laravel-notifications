@@ -37,7 +37,7 @@ class Notification extends Model
         $this->update(['readed' => false]);
     }
 
-    public function notifiable()
+    public function alertable()
     {
         return $this->morphTo();
     }

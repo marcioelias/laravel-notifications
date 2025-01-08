@@ -22,9 +22,9 @@ class NotificationResource extends JsonResource
             'readed' => $this->readed,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'user' => $this->whenLoaded('notifiable', [
-                'id' => $this->notifiable->id,
-                'name' => $this->notifiable->name,
+            'user' => $this->whenLoaded('alertable', [
+                'id' => $this->alertable->id,
+                'name' => $this->alertable->name,
             ]),
         ];
     }

@@ -85,14 +85,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Tables with notifiable trait on his models
+    | Tables with alertable trait on his models
     |--------------------------------------------------------------------------
     |
     | Will be executed a migration to create device_token column on each table
     | listed here.
     |
     */
-    'notifiable_tables' => [
+    'alertable_tables' => [
         'users',
     ],
 

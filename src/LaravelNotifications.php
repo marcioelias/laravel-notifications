@@ -61,7 +61,7 @@ class LaravelNotifications
 
     protected function storeNotification(string $title, ?string $body = null, NotificationType $notificationType = NotificationType::SMS, array $data = [])
     {
-        Auth::user()->notifiable()->create([
+        Auth::user()->alertable()->create([
             'title' => $title,
             'body' => $body,
             'notification_type' => $notificationType,

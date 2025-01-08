@@ -18,9 +18,17 @@ class LaravelNotificationsServiceProvider extends PackageServiceProvider
             ->name('laravel-notifications')
             ->hasRoute('api')
             ->hasConfigFile('notifications')
+            ->hasTranslations()
             ->hasMigrations(
                 'create_notifications_table',
                 'alter_users_table_add_device_token_column'
             );
+    }
+
+    public function bootingPackage()
+    {
+        $this->publishes([
+            $this->package->basePath('/../routes/') => base_path("routes/vendor/{$this->package->shortName()}"),
+        ], "{$this->package->shortName()}-routes");
     }
 }

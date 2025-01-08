@@ -10,8 +10,8 @@ it('must return a list of notifications', function () {
     Sanctum::actingAs($user = Helpers::fakeUser());
 
     Notification::factory(count: 5)->create([
-        'notifiable_type' => User::class,
-        'notifiable_id' => $user->id,
+        'alertable_type' => User::class,
+        'alertable_id' => $user->id,
         'readed' => false,
     ]);
 
@@ -26,8 +26,8 @@ it('must math notification resource structure', function () {
     Sanctum::actingAs($user = Helpers::fakeUser());
 
     $notification = Notification::factory(count: 1)->create([
-        'notifiable_type' => User::class,
-        'notifiable_id' => $user->id,
+        'alertable_type' => User::class,
+        'alertable_id' => $user->id,
         'readed' => false,
     ])->first();
 
@@ -57,8 +57,8 @@ it('must paginate notifications', function () {
     Sanctum::actingAs($user = Helpers::fakeUser());
 
     Notification::factory(count: 3)->create([
-        'notifiable_type' => User::class,
-        'notifiable_id' => $user->id,
+        'alertable_type' => User::class,
+        'alertable_id' => $user->id,
         'readed' => false,
     ]);
 
@@ -78,8 +78,8 @@ it('must mark a notification as readed', function () {
     Sanctum::actingAs($user = Helpers::fakeUser());
 
     $notification = Notification::factory(count: 1)->create([
-        'notifiable_type' => User::class,
-        'notifiable_id' => $user->id,
+        'alertable_type' => User::class,
+        'alertable_id' => $user->id,
         'readed' => false,
     ])->first();
 
@@ -100,8 +100,8 @@ it('must mark a notification as unreaded', function () {
     Sanctum::actingAs($user = Helpers::fakeUser());
 
     $notification = Notification::factory(count: 1)->create([
-        'notifiable_type' => User::class,
-        'notifiable_id' => $user->id,
+        'alertable_type' => User::class,
+        'alertable_id' => $user->id,
         'readed' => true,
     ])->first();
 
@@ -115,4 +115,42 @@ it('must mark a notification as unreaded', function () {
 
     $notification->refresh();
     expect($notification->readed)->toBe(false);
+});
+
+it('must mark all notifications as read', function () {
+    $this->withoutExceptionHandling();
+    Sanctum::actingAs($user = Helpers::fakeUser());
+
+    Notification::factory(count: 3)->create([
+        'alertable_type' => User::class,
+        'alertable_id' => $user->id,
+        'readed' => false,
+    ]);
+
+    $response = $this->putJson(route('laravel-notifications.read-all'));
+
+    expect($response->status())->toBe(202);
+
+    $notifications = Notification::all();
+    expect($notifications)->toHaveCount(3);
+    foreach ($notifications as $notification) {
+        expect($notification->readed)->toBe(true);
+    }
+});
+
+it('must return a count of all unread notifications', function () {
+    $this->withoutExceptionHandling();
+    Sanctum::actingAs($user = Helpers::fakeUser());
+
+    Notification::factory(count: 3)->create([
+        'alertable_type' => User::class,
+        'alertable_id' => $user->id,
+        'readed' => false,
+    ]);
+
+    $response = $this->getJson(route('laravel-notifications.unread-count'));
+
+    expect($response->status())->toBe(200);
+    expect($response->json('data'))->toBeArray()->toHaveCount(1);
+    expect($response->json('data.total'))->toBe(3);
 });

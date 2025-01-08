@@ -8,8 +8,8 @@ it('can mark a notification as readed', function () {
     $notificationData = [
         'title' => 'Test Notification',
         'body' => 'This is a test notification body.',
-        'notifiable_type' => 'User',
-        'notifiable_id' => 1,
+        'alertable_type' => 'User',
+        'alertable_id' => 1,
     ];
 
     Helpers::fakeUser();
