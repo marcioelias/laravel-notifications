@@ -9,7 +9,7 @@ class DeviceTokenRequest extends FormRequest
     public function rules()
     {
         return [
-            'device_token' => 'nullable|string',
+            'device_token' => 'nullable',
             'custom_user_data' => 'sometimes|nullable|array',
         ];
     }
