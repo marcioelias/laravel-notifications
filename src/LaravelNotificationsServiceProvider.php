@@ -21,7 +21,8 @@ class LaravelNotificationsServiceProvider extends PackageServiceProvider
             ->hasTranslations()
             ->hasMigrations(
                 'create_notifications_table',
-                'alter_users_table_add_device_token_column'
+                'alter_users_table_add_device_token_column',
+                'alter_users_table_add_endpoint_arn_column'
             );
     }
 
