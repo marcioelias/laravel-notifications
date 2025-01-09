@@ -95,8 +95,6 @@ it('sends push notifications using AWS SNS', function () {
 
     $result = null;
 
-    Sanctum::actingAs($user = Helpers::fakeUser());
-
     try {
         $notifications->sendPush(
             'arn:aws:sns:us-east-1:123456789012:endpoint/APNS/MyApp/fd6dc79a-cf27-42a3-8c61-d56be70bb43d',

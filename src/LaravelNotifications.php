@@ -10,7 +10,7 @@ use MarcioElias\LaravelNotifications\Models\Notification;
 
 class LaravelNotifications
 {
-    public function sendPush(string $to, string $title, ?string $body = null, array $data = [])
+    public function sendPush(string $to, string $title, ?string $body = null, ?array $data = [])
     {
         $payload = $this->getSnsPushPayload($title, $body, $data);
 
@@ -114,7 +114,7 @@ class LaravelNotifications
         ];
     }
 
-    public function createEndpointArn(string $deviceToken, array $customUserData = []): string
+    public function createEndpointArn(string $deviceToken, ?array $customUserData = []): string
     {
         try {
             $customUserData = json_encode($customUserData);

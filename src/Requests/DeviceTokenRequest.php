@@ -9,8 +9,8 @@ class DeviceTokenRequest extends FormRequest
     public function rules()
     {
         return [
-            'device_token' => 'required|string',
-            'custom_user_data' => 'nullable|array',
+            'device_token' => 'nullable|string',
+            'custom_user_data' => 'sometimes|nullable|array',
         ];
     }
 }

@@ -13,12 +13,19 @@ class DeviceTokenController
         try {
             $user = Auth::user();
 
-            $deviceToken = match (config('notifications.push_service_provider')) {
+            if ($request->device_token === $user->device_token) {
+                return response()->json([
+                    'message' => 'Device token already exists',
+                ], 200);
+            }
+
+            $endpointArn = match (config('notifications.push_service_provider')) {
                 'aws_sns' => LaravelNotifications::createEndpointArn($request->device_token, $request->custom_user_data),
-                default => $request->device_token,
+                default => null,
             };
 
-            $user->device_token = $deviceToken;
+            $user->device_token = $request->device_token;
+            $user->endpoint_arn = $endpointArn;
             $user->save();
 
             return response()->json([
