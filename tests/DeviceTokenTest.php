@@ -77,7 +77,7 @@ it('updates the device token for the user using the AWS SNS service', function (
 
 });
 
-it('updates the device token for the user using the OneSignal service', function() {
+it('updates the device token for the user using the OneSignal service', function () {
     Config::set('notifications.push_service_provider', 'onesignal');
 
     Sanctum::actingAs($user = Helpers::fakeUser());

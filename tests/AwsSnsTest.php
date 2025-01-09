@@ -3,7 +3,6 @@
 use Aws\Sns\SnsClient;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Laravel\Sanctum\Sanctum;
 use MarcioElias\LaravelNotifications\LaravelNotifications;
 use MarcioElias\LaravelNotifications\Tests\Support\Helpers;
 
