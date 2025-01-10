@@ -11,7 +11,7 @@ use MarcioElias\LaravelNotifications\Traits\HasNotifications;
 class User extends Authenticatable implements Alertable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasNotifications, HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory, HasNotifications;
 
     /**
      * The attributes that are mass assignable.
