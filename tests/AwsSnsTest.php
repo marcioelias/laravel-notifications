@@ -11,8 +11,10 @@ it('throws an exception if push client is not found', function () {
 
     $notifications = new LaravelNotifications;
 
+    $user = Helpers::fakeUser();
+
     $notifications->sendPush(
-        'arn:aws:sns:us-east-1:123456789012:endpoint/APNS/MyApp/fd6dc79a-cf27-42a3-8c61-d56be70bb43d',
+        $user,
         'title',
         'body',
         ['alert' => 'Hello, world!']
@@ -77,10 +79,12 @@ it('sends push notifications using AWS SNS', function () {
         ]),
     ];
 
+    $user = Helpers::fakeUser();
+
     $snsClientMock->shouldReceive('publish')
         ->once()
         ->with([
-            'TargetArn' => 'arn:aws:sns:us-east-1:123456789012:endpoint/APNS/MyApp/fd6dc79a-cf27-42a3-8c61-d56be70bb43d',
+            'TargetArn' => $user->endpoint_arn,
             'Message' => json_encode($payload),
             'MessageStructure' => 'json',
         ])
@@ -96,7 +100,7 @@ it('sends push notifications using AWS SNS', function () {
 
     try {
         $notifications->sendPush(
-            'arn:aws:sns:us-east-1:123456789012:endpoint/APNS/MyApp/fd6dc79a-cf27-42a3-8c61-d56be70bb43d',
+            $user,
             'title',
             'body',
             ['alert' => 'Hello, world!']

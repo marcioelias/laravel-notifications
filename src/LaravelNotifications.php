@@ -3,14 +3,16 @@
 namespace MarcioElias\LaravelNotifications;
 
 use Aws\Sns\SnsClient;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
+use MarcioElias\LaravelNotifications\Contracts\Alertable;
 use MarcioElias\LaravelNotifications\Enums\NotificationType;
 use MarcioElias\LaravelNotifications\Models\Notification;
 
 class LaravelNotifications
 {
-    public function sendPush(string $to, string $title, ?string $body = null, ?array $data = [])
+    public function sendPush(Alertable $to, string $title, ?string $body = null, ?array $data = [])
     {
         $payload = $this->getSnsPushPayload($title, $body, $data);
 
@@ -18,12 +20,13 @@ class LaravelNotifications
             $pushClient = $this->getPushClient();
 
             $pushClient->publish([
-                'TargetArn' => $to,
+                'TargetArn' => $to->getDestination(),
                 'Message' => json_encode($payload),
                 'MessageStructure' => 'json',
             ]);
 
             $this->storeNotification(
+                $to,
                 $title,
                 $body,
                 NotificationType::PUSH,
@@ -59,9 +62,9 @@ class LaravelNotifications
         ]);
     }
 
-    protected function storeNotification(string $title, ?string $body = null, NotificationType $notificationType = NotificationType::SMS, array $data = [])
+    protected function storeNotification(Alertable $to, string $title, ?string $body = null, NotificationType $notificationType = NotificationType::SMS, array $data = [])
     {
-        Auth::user()->alertable()->create([
+        $to->alertable()->create([
             'title' => $title,
             'body' => $body,
             'notification_type' => $notificationType,
@@ -114,9 +117,13 @@ class LaravelNotifications
         ];
     }
 
-    public function createEndpointArn(string $deviceToken, ?array $customUserData = []): string
+    public function createEndpointArn(?string $deviceToken, ?array $customUserData = []): ?string
     {
         try {
+            if (!$deviceToken) {
+                return null;
+            }
+
             $customUserData = json_encode($customUserData);
 
             if (strlen($customUserData) > 256) {
