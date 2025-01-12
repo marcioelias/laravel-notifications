@@ -19,8 +19,10 @@ class LaravelNotifications
         try {
             $pushClient = $this->getPushClient();
 
+            throw_if(! $destination = $to->getDestination(), new InvalidArgumentException('Destination not found'));
+
             $pushClient->publish([
-                'TargetArn' => $to->getDestination(),
+                'TargetArn' => $destination,
                 'Message' => json_encode($payload),
                 'MessageStructure' => 'json',
             ]);
