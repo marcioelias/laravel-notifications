@@ -84,7 +84,7 @@ it('sends push notifications using AWS SNS', function () {
     $snsClientMock->shouldReceive('publish')
         ->once()
         ->with([
-            'TargetArn' => $user->endpoint_arn,
+            'TargetArn' => $user->getDestination(),
             'Message' => json_encode($payload),
             'MessageStructure' => 'json',
         ])
@@ -161,4 +161,15 @@ it('should not use a custom user data with more than 256 characters', function (
             ['user_id' => str_repeat('a', 257)]
         );
     })->toThrow(InvalidArgumentException::class);
+});
+
+it('should return null when creating a endpoint arn without device token', function() {
+    Helpers::setupAwsEnv();
+
+    Config::set('notifications.aws_sns_application_arn', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+
+    $notifications = new LaravelNotifications;
+
+    expect($notifications->createEndpointArn('', ['user_id' => 1]))->toBeNull();
+    expect($notifications->createEndpointArn(null, ['user_id' => 1]))->toBeNull();
 });
