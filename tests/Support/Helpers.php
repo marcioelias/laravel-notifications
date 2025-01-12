@@ -12,7 +12,7 @@ class Helpers
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
-            'endpoint_arn' => 'arn:aws:sns:us-east-1:123456789012:endpoint/GCM/SomeEndpointArn'
+            'endpoint_arn' => 'arn:aws:sns:us-east-1:123456789012:endpoint/GCM/SomeEndpointArn',
         ]);
     }
 

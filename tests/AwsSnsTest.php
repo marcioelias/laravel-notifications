@@ -163,7 +163,7 @@ it('should not use a custom user data with more than 256 characters', function (
     })->toThrow(InvalidArgumentException::class);
 });
 
-it('should return null when creating a endpoint arn without device token', function() {
+it('should return null when creating a endpoint arn without device token', function () {
     Helpers::setupAwsEnv();
 
     Config::set('notifications.aws_sns_application_arn', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');

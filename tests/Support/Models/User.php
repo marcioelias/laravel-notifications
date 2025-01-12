@@ -22,7 +22,7 @@ class User extends Authenticatable implements Alertable
         'name',
         'email',
         'password',
-        'endpoint_arn'
+        'endpoint_arn',
     ];
 
     /**
