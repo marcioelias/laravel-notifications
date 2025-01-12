@@ -20,7 +20,6 @@ it('allows calling methods on the facade', function () {
 
     $this->app->instance(LaravelNotificationsClass::class, $mockedService);
 
-
     $result = LaravelNotifications::sendPush($user, 'title', 'body', ['message' => 'Hello World']);
 
     expect($result)->toBeTrue();

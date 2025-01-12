@@ -3,8 +3,6 @@
 namespace MarcioElias\LaravelNotifications;
 
 use Aws\Sns\SnsClient;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
 use MarcioElias\LaravelNotifications\Contracts\Alertable;
 use MarcioElias\LaravelNotifications\Enums\NotificationType;
@@ -122,7 +120,7 @@ class LaravelNotifications
     public function createEndpointArn(?string $deviceToken, ?array $customUserData = []): ?string
     {
         try {
-            if (!$deviceToken) {
+            if (! $deviceToken) {
                 return null;
             }
 

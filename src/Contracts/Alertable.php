@@ -4,5 +4,5 @@ namespace MarcioElias\LaravelNotifications\Contracts;
 
 interface Alertable
 {
-    public function getDestination(): string|null;
+    public function getDestination(): ?string;
 }
