@@ -32,67 +32,14 @@ class LaravelNotificationsServiceProvider extends PackageServiceProvider
             $this->package->basePath('/../routes/') => base_path("routes/vendor/{$this->package->shortName()}"),
         ], "{$this->package->shortName()}-routes");
 
-        // Publica a migration para campos personalizados
+        // Publica a migration stub para o usuário adicionar campos personalizados
         $migrationPath = $this->package->basePath('/../database/migrations/add_custom_fields_to_notifications_table.php.stub');
-
+        
+        // Garante que o arquivo existe antes de registrar (necessário para o Laravel registrar a tag)
         if (file_exists($migrationPath)) {
-            // Usa uma closure que será executada quando a publicação acontecer
-            // Isso permite calcular o caminho dinamicamente baseado na configuração
             $this->publishes([
-                $migrationPath => function () {
-                    $destinationPath = $this->getMigrationsDestinationPath();
-
-                    return $destinationPath.'/'.date('Y_m_d_His').'_add_custom_fields_to_notifications_table.php';
-                },
+                realpath($migrationPath) => database_path('migrations/0000_00_00_000000_add_custom_fields_to_notifications_table.php'),
             ], "{$this->package->shortName()}-custom-fields-migration");
         }
-    }
-
-    /**
-     * Get the destination path for migrations.
-     * Detects Tenancy for Laravel automatically or uses config.
-     */
-    protected function getMigrationsDestinationPath(): string
-    {
-        // Check if custom path is configured
-        $customPath = config('notifications.migrations_path');
-        if ($customPath) {
-            return base_path($customPath);
-        }
-
-        // Auto-detect Tenancy for Laravel
-        if ($this->isTenancyInstalled()) {
-            // Check common Tenancy paths
-            $tenancyPaths = [
-                'database/tenant',
-                'Database/Tenant',
-                'database/tenants',
-                'Database/Tenants',
-            ];
-
-            foreach ($tenancyPaths as $path) {
-                $fullPath = base_path($path);
-                if (is_dir($fullPath)) {
-                    return $fullPath;
-                }
-            }
-
-            // Default Tenancy path if directory doesn't exist yet
-            return base_path('database/tenant');
-        }
-
-        // Default Laravel migrations path
-        return database_path('migrations');
-    }
-
-    /**
-     * Check if Tenancy for Laravel package is installed.
-     */
-    protected function isTenancyInstalled(): bool
-    {
-        return class_exists('Stancl\Tenancy\TenancyServiceProvider')
-            || class_exists('Stancl\Tenancy\Tenant')
-            || is_dir(base_path('database/tenant'))
-            || is_dir(base_path('Database/Tenant'));
     }
 }
