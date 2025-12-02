@@ -4,6 +4,15 @@ All notable changes to `laravel-notifications` will be documented in this file.
 
 ## [Unreleased]
 
+## [1.8.3] - 2025-01-02
+
+### Added
+- Simplified custom fields migration publishing - users can now publish the migration stub to add their own custom fields
+
+### Changed
+- Simplified migration publishing logic - removed Tenancy-specific code for cleaner implementation
+- Migration now publishes to standard `database/migrations` directory
+
 ## [1.8.2] - 2025-01-XX
 
 ### Fixed
