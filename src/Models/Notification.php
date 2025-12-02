@@ -47,13 +47,13 @@ class Notification extends Model
     public function fillCustomFields(array $attributes): self
     {
         $protectedFields = ['id', 'title', 'body', 'notification_type', 'readed', 'data', 'alertable_id', 'alertable_type', 'created_at', 'updated_at'];
-        
+
         $customFields = array_diff_key($attributes, array_flip($protectedFields));
-        
+
         foreach ($customFields as $key => $value) {
             $this->setAttribute($key, $value);
         }
-        
+
         return $this;
     }
 }

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * 
+     *
      * Esta migration adiciona campos personalizados de exemplo para os testes.
      * Em produção, o usuário deve criar sua própria migration.
      */
@@ -31,4 +31,3 @@ return new class extends Migration
         });
     }
 };
-

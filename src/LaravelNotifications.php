@@ -64,7 +64,7 @@ class LaravelNotifications
     }
 
     /**
-     * @param Alertable&\MarcioElias\LaravelNotifications\Traits\HasNotifications $to
+     * @param  Alertable&\MarcioElias\LaravelNotifications\Traits\HasNotifications  $to
      */
     protected function storeNotification(Alertable $to, string $title, ?string $body = null, NotificationType $notificationType = NotificationType::SMS, array $data = [], array $customFields = [])
     {
