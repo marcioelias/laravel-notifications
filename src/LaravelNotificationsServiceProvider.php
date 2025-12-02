@@ -44,7 +44,7 @@ class LaravelNotificationsServiceProvider extends PackageServiceProvider
             $destinationPath = $this->getMigrationsDestinationPath();
 
             $this->publishes([
-                $migrationPath => $destinationPath . '/' . date('Y_m_d_His') . '_add_custom_fields_to_notifications_table.php',
+                $migrationPath => $destinationPath.'/'.date('Y_m_d_His').'_add_custom_fields_to_notifications_table.php',
             ], "{$this->package->shortName()}-custom-fields-migration");
         }
     }
