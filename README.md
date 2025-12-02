@@ -41,16 +41,44 @@ You can install the package via composer:
 composer require marcioelias/laravel-notifications
 ```
 
-Publish the migrations:
+## Publishing Resources
+
+To see all available publishable resources, run:
+
+```bash
+php artisan vendor:publish --provider="MarcioElias\LaravelNotifications\LaravelNotificationsServiceProvider"
+```
+
+Or publish specific resources using tags:
+
+**Publish the migrations:**
 
 ```bash
 php artisan vendor:publish --tag="laravel-notifications-migrations"
 ```
 
-Publish the config file with (Optional, just required if you need to config some customizations):
+**Publish the config file** (Optional, just required if you need to config some customizations):
 
 ```bash
 php artisan vendor:publish --tag="laravel-notifications-config"
+```
+
+**Publish translations:**
+
+```bash
+php artisan vendor:publish --tag="laravel-notifications-translations"
+```
+
+**Publish routes:**
+
+```bash
+php artisan vendor:publish --tag="laravel-notifications-routes"
+```
+
+**Publish custom fields migration:**
+
+```bash
+php artisan vendor:publish --tag="laravel-notifications-custom-fields-migration"
 ```
 
 This is the contents of the published config file:
@@ -167,6 +195,25 @@ You can add custom fields to the `notifications` table to store additional data 
 
 ```bash
 php artisan vendor:publish --tag="laravel-notifications-custom-fields-migration"
+```
+
+The migration will be published to:
+- **Default**: `database/migrations/`
+- **Tenancy for Laravel**: Automatically detected and published to `database/tenant` or `Database/Tenant`
+- **Custom path**: Configure in `config/notifications.php` or via `NOTIFICATIONS_MIGRATIONS_PATH` env variable
+
+**Configuring custom migrations directory:**
+
+If you're using Tenancy for Laravel, the package will automatically detect it. You can also manually configure the path:
+
+**Option 1: Via config file** (`config/notifications.php`):
+```php
+'migrations_path' => 'database/tenant', // or 'Database/Tenant'
+```
+
+**Option 2: Via environment variable** (`.env`):
+```env
+NOTIFICATIONS_MIGRATIONS_PATH=database/tenant
 ```
 
 **Step 2: Edit the migration file**

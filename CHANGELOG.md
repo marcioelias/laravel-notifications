@@ -4,6 +4,18 @@ All notable changes to `laravel-notifications` will be documented in this file.
 
 ## [Unreleased]
 
+## [1.8.1] - 2025-01-XX
+
+### Added
+- Automatic detection of Tenancy for Laravel package
+- Configurable migrations directory via `migrations_path` config option
+- Environment variable `NOTIFICATIONS_MIGRATIONS_PATH` for custom migrations directory
+- Support for publishing custom fields migration to tenant directories
+
+### Fixed
+- Fixed custom fields migration tag registration issue
+- Improved migration publishing to work correctly with `vendor:publish` command
+
 ## [1.8.0] - 2025-01-XX
 
 ### Added

@@ -55,4 +55,17 @@ return [
         'pagination' => 20,
     ],
 
+    /*
+     * |--------------------------------------------------------------------------
+     * | Migrations Directory
+     * |--------------------------------------------------------------------------
+     * |
+     * | Directory where custom fields migration will be published.
+     * | Default: 'database/migrations'
+     * | For Tenancy for Laravel: 'database/tenant' or 'Database/Tenant'
+     * | You can also set this via env: NOTIFICATIONS_MIGRATIONS_PATH
+     * |
+     */
+    'migrations_path' => env('NOTIFICATIONS_MIGRATIONS_PATH', null),
+
 ];
