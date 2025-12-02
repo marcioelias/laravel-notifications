@@ -4,6 +4,13 @@ All notable changes to `laravel-notifications` will be documented in this file.
 
 ## [Unreleased]
 
+## [1.8.2] - 2025-01-XX
+
+### Fixed
+- Fixed custom fields migration tag not appearing in `vendor:publish` command
+- Moved migration publishing from `boot()` to `bootingPackage()` to ensure early registration
+- Improved tag registration timing for better compatibility with Laravel's publish command
+
 ## [1.8.1] - 2025-01-XX
 
 ### Added
