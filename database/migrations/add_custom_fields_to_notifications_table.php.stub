@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * Adicione aqui os campos personalizados que deseja incluir na tabela notifications.
+     * 
+     * Exemplos:
+     * $table->string('category')->nullable();
+     * $table->integer('priority')->default(0);
+     * $table->foreignId('related_id')->nullable();
+     * $table->json('metadata')->nullable();
+     */
+    public function up()
+    {
+        Schema::table('notifications', function (Blueprint $table) {
+            // Adicione seus campos personalizados aqui
+            // Exemplo:
+            // $table->string('category')->nullable();
+            // $table->integer('priority')->default(0);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down()
+    {
+        Schema::table('notifications', function (Blueprint $table) {
+            // Reverta os campos personalizados aqui
+            // Exemplo:
+            // $table->dropColumn(['category', 'priority']);
+        });
+    }
+};
+

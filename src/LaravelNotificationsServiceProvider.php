@@ -31,5 +31,11 @@ class LaravelNotificationsServiceProvider extends PackageServiceProvider
         $this->publishes([
             $this->package->basePath('/../routes/') => base_path("routes/vendor/{$this->package->shortName()}"),
         ], "{$this->package->shortName()}-routes");
+
+        // Publica a migration para campos personalizados
+        $this->publishes([
+            $this->package->basePath('/../database/migrations/add_custom_fields_to_notifications_table.php.stub') => 
+                database_path('migrations/' . date('Y_m_d_His') . '_add_custom_fields_to_notifications_table.php'),
+        ], "{$this->package->shortName()}-custom-fields-migration");
     }
 }

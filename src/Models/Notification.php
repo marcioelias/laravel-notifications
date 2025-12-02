@@ -10,13 +10,11 @@ class Notification extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'body',
-        'notification_type',
-        'readed',
-        'data',
-    ];
+    /**
+     * Campos protegidos que não podem ser preenchidos em massa.
+     * Campos personalizados adicionados pelo usuário serão permitidos dinamicamente.
+     */
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected function casts(): array
     {
@@ -40,5 +38,22 @@ class Notification extends Model
     public function alertable()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Permite adicionar campos personalizados dinamicamente
+     * Remove campos protegidos antes de permitir mass assignment
+     */
+    public function fillCustomFields(array $attributes): self
+    {
+        $protectedFields = ['id', 'title', 'body', 'notification_type', 'readed', 'data', 'alertable_id', 'alertable_type', 'created_at', 'updated_at'];
+        
+        $customFields = array_diff_key($attributes, array_flip($protectedFields));
+        
+        foreach ($customFields as $key => $value) {
+            $this->setAttribute($key, $value);
+        }
+        
+        return $this;
     }
 }

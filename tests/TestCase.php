@@ -45,5 +45,9 @@ class TestCase extends Orchestra
 
         $migration = include __DIR__.'/../database/migrations/create_notifications_table.php.stub';
         $migration->up();
+
+        // Adiciona campos personalizados para os testes
+        $customFieldsMigration = include __DIR__.'/Support/database/migrations/0002_01_01_000000_add_custom_fields_to_notifications_table.php';
+        $customFieldsMigration->up();
     }
 }

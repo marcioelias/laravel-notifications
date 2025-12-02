@@ -43,3 +43,45 @@ it('tests the morphTo relationship with a User model', function () {
     expect($notification->alertable)->toBeInstanceOf(User::class);
     expect($notification->alertable->id)->toBe($user->id);
 });
+
+it('can create a notification with custom fields', function () {
+    $user = Helpers::fakeUser();
+
+    $notification = Notification::create([
+        'title' => 'Test Notification',
+        'body' => 'This is a test notification body.',
+        'alertable_id' => $user->id,
+        'alertable_type' => User::class,
+        'notification_type' => 2,
+        'category' => 'order',
+        'priority' => 5,
+        'related_id' => 123,
+    ]);
+
+    expect($notification->category)->toBe('order');
+    expect($notification->priority)->toBe(5);
+    expect($notification->related_id)->toBe(123);
+    expect(DB::table('notifications')->where('id', $notification->id)->value('category'))->toBe('order');
+});
+
+it('can update a notification with custom fields using fillCustomFields method', function () {
+    $user = Helpers::fakeUser();
+
+    $notification = Notification::create([
+        'title' => 'Test Notification',
+        'body' => 'This is a test notification body.',
+        'alertable_id' => $user->id,
+        'alertable_type' => User::class,
+        'notification_type' => 2,
+    ]);
+
+    $notification->fillCustomFields([
+        'category' => 'order',
+        'priority' => 5,
+        'related_id' => 123,
+    ])->save();
+
+    expect($notification->fresh()->category)->toBe('order');
+    expect($notification->fresh()->priority)->toBe(5);
+    expect($notification->fresh()->related_id)->toBe(123);
+});

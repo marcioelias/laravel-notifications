@@ -10,7 +10,7 @@ use MarcioElias\LaravelNotifications\Models\Notification;
 
 class LaravelNotifications
 {
-    public function sendPush(Alertable $to, string $title, ?string $body = null, ?array $data = [])
+    public function sendPush(Alertable $to, string $title, ?string $body = null, ?array $data = [], ?array $customFields = [])
     {
         $payload = $this->getSnsPushPayload($title, $body, $data);
 
@@ -30,7 +30,8 @@ class LaravelNotifications
                 $title,
                 $body,
                 NotificationType::PUSH,
-                $payload);
+                $payload,
+                $customFields);
 
         } catch (\Exception $e) {
             throw $e;
@@ -62,14 +63,19 @@ class LaravelNotifications
         ]);
     }
 
-    protected function storeNotification(Alertable $to, string $title, ?string $body = null, NotificationType $notificationType = NotificationType::SMS, array $data = [])
+    /**
+     * @param Alertable&\MarcioElias\LaravelNotifications\Traits\HasNotifications $to
+     */
+    protected function storeNotification(Alertable $to, string $title, ?string $body = null, NotificationType $notificationType = NotificationType::SMS, array $data = [], array $customFields = [])
     {
-        $to->alertable()->create([
+        $notificationData = array_merge([
             'title' => $title,
             'body' => $body,
             'notification_type' => $notificationType,
             'data' => $data,
-        ]);
+        ], $customFields);
+
+        $to->alertable()->create($notificationData);
     }
 
     protected function getSnsPushPayload(string $title, ?string $body = null, array $data = [])

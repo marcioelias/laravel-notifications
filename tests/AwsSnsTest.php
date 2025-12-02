@@ -115,6 +115,91 @@ it('sends push notifications using AWS SNS', function () {
     expect(DB::table('notifications')->count())->toBe(1);
 });
 
+it('saves custom fields when sending push notifications', function () {
+    $snsClientMock = Mockery::mock(SnsClient::class);
+
+    $payload = [
+        'GCM' => json_encode([
+            'fcmV1Message' => [
+                'message' => [
+                    'notification' => [
+                        'title' => 'title',
+                        'body' => 'body',
+                    ],
+                ],
+            ],
+            'data' => ['alert' => 'Hello, world!'],
+        ]),
+        'APNS' => json_encode([
+            'aps' => [
+                'alert' => [
+                    'title' => 'title',
+                    'body' => 'body',
+                ],
+                'sound' => 'default',
+            ],
+            'data' => ['alert' => 'Hello, world!'],
+        ]),
+        'APNS_SANDBOX' => json_encode([
+            'aps' => [
+                'alert' => [
+                    'title' => 'title',
+                    'body' => 'body',
+                ],
+                'sound' => 'default',
+            ],
+            'data' => ['alert' => 'Hello, world!'],
+        ]),
+        'ADM' => json_encode([
+            'notification' => [
+                'title' => 'title',
+                'body' => 'body',
+            ],
+            'data' => ['alert' => 'Hello, world!'],
+        ]),
+    ];
+
+    $user = Helpers::fakeUser();
+
+    $snsClientMock->shouldReceive('publish')
+        ->once()
+        ->with([
+            'TargetArn' => $user->getDestination(),
+            'Message' => json_encode($payload),
+            'MessageStructure' => 'json',
+        ])
+        ->andReturn(['MessageId' => '1234']);
+
+    Config::set('notifications.push_service_provider', 'aws_sns');
+
+    $notifications = Mockery::mock(LaravelNotifications::class)->makePartial();
+    $notifications->shouldAllowMockingProtectedMethods();
+    $notifications->shouldReceive('getPushClient')->andReturn($snsClientMock);
+
+    $customFields = [
+        'category' => 'order',
+        'priority' => 5,
+        'related_id' => 123,
+    ];
+
+    $notifications->sendPush(
+        $user,
+        'title',
+        'body',
+        ['alert' => 'Hello, world!'],
+        $customFields
+    );
+
+    $notification = DB::table('notifications')->latest()->first();
+
+    expect($notification)->not->toBeNull();
+    expect($notification->category)->toBe('order');
+    expect($notification->priority)->toBe(5);
+    expect($notification->related_id)->toBe(123);
+    expect($notification->title)->toBe('title');
+    expect($notification->body)->toBe('body');
+});
+
 it('can create a endpoint arn to send push notifications using aws sns service', function () {
     Helpers::setupAwsEnv();
 

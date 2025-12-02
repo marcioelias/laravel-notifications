@@ -159,6 +159,58 @@ You can add some custom object to the push notification.
     }
 ```
 
+### Custom Fields in Notifications Table
+
+You can add custom fields to the `notifications` table to store additional data with each notification.
+
+**Step 1: Publish the custom fields migration**
+
+```bash
+php artisan vendor:publish --tag="laravel-notifications-custom-fields-migration"
+```
+
+**Step 2: Edit the migration file**
+
+Open the published migration file and add your custom fields:
+
+```php
+public function up()
+{
+    Schema::table('notifications', function (Blueprint $table) {
+        $table->string('category')->nullable();
+        $table->integer('priority')->default(0);
+        $table->foreignId('related_id')->nullable();
+        // Add your custom fields here
+    });
+}
+```
+
+**Step 3: Run the migration**
+
+```bash
+php artisan migrate
+```
+
+**Step 4: Use custom fields when sending notifications**
+
+```php
+use MarcioElias\LaravelNotifications\LaravelNotifications;
+
+LaravelNotifications::sendPush(
+    to: $user,
+    title: 'New Order',
+    body: 'You have a new order',
+    data: ['order_id' => 123],
+    customFields: [
+        'category' => 'order',
+        'priority' => 5,
+        'related_id' => 123
+    ]
+);
+```
+
+The custom fields will be saved in the `notifications` table along with the standard notification data.
+
 ## Testing
 
 ```bash
